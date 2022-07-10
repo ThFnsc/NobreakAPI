@@ -49,7 +49,7 @@ public readonly struct NobreakStatus
         return new NobreakStatus
         {
             VoltageIn = vIn1,
-            VoltageOut = vOut,
+            VoltageOut = vOut * 2,
             LoadPercentage = load,
             FrequencyHz = frequencyHz,
             BatteryVoltage = vBat,

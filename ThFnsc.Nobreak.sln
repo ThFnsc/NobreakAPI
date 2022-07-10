@@ -9,6 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThFnsc.Nobreak", "src\ThFns
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThFnsc.Nobreak.Core", "src\ThFnsc.Nobreak.Core\ThFnsc.Nobreak.Core.csproj", "{C7B0E0EE-11F2-4FFD-A7D1-D78554D48D90}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8E585A48-CC70-4607-84F5-9745C7B76BC4}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+		.github\workflows\docker.yml = .github\workflows\docker.yml
+		Dockerfile = Dockerfile
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

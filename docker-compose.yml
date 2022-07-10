@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  nobreakapi:
+    build: .
+    restart: always
+    volumes:
+      - /dev:/dev
+    privileged: true
+    ports: 
+      - 6300:80

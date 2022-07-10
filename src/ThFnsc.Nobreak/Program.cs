@@ -16,12 +16,8 @@ builder.Services.AddSwaggerGen(conf =>
 builder.Services.AddSingleton<INobreakCommunicator, NobreakCommunicator>();
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
