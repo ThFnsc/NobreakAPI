@@ -11,4 +11,5 @@ public interface INobreakCommunicator
     NobreakStatus Test(byte? minutes = null);
     NobreakStatus TestUntilFlatBattery();
     NobreakStatus CancelTest();
+    NobreakStatus SetBeep(bool enabled);
 }

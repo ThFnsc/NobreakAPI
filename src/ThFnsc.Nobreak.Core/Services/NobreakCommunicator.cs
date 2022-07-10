@@ -137,4 +137,21 @@ public class NobreakCommunicator : INobreakCommunicator, IDisposable
             return EnsureTestIs(running: false);
         }
     }
+
+    public NobreakStatus SetBeep(bool enabled)
+    {
+        lock (this)
+        {
+            var status = GetStatusInternal();
+            if (status.BeepOn == enabled)
+                return status;
+            Thread.Sleep(100);
+            Write("Q");
+            Thread.Sleep(100);
+            status = GetStatusInternal();
+            if (status.BeepOn != enabled)
+                throw new Exception("Nobreak did not obey toggle beep command");
+            return status;
+        }
+    }
 }

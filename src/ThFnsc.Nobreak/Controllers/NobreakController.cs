@@ -44,6 +44,14 @@ public class NobreakController : ControllerBase
     }
 
     /// <summary>
+    /// Changes the beeping mode
+    /// </summary>
+    /// <param name="state">True to enable beeper</param>
+    [HttpPost("Beep/{state}")]
+    public NobreakStatus ChangeBeep([Required] bool state) =>
+        _nobreakCommunicator.SetBeep(state);
+
+    /// <summary>
     /// Cancels a test
     /// </summary>
     [HttpDelete("Test")]
