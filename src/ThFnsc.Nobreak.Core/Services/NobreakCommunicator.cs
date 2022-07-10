@@ -86,7 +86,15 @@ public class NobreakCommunicator : INobreakCommunicator, IDisposable
     {
         if (!ConnectedInternal)
             ConnectInternal();
-        _serialPort!.Write(text + '\r');
+        try
+        {
+            _serialPort!.Write(text + '\r');
+        }
+        catch (TimeoutException)
+        {
+            DisconnectInternal();
+            throw;
+        }
     }
 
     private string Read()
