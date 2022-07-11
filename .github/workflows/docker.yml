@@ -1,4 +1,5 @@
 name: CI to Docker Hub
+on: workflow_dispatch
 
 jobs:
   build:
