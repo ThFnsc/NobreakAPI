@@ -1,15 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.ComponentModel.DataAnnotations;
 using ThFnsc.Nobreak.Core.Models;
 using ThFnsc.Nobreak.Core.Services;
 
 namespace ThFnsc.Nobreak.Controllers;
+
+/// <summary>
+/// Controller to handle nobreak requests
+/// </summary>
 [ApiController]
 [Route("[controller]")]
-public class NobreakController : ControllerBase
+[ShutdownAppOnManyErrors(4)]
+public class NobreakController : ControllerBase, IActionFilter
 {
     private readonly INobreakCommunicator _nobreakCommunicator;
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
     public NobreakController(INobreakCommunicator nobreakCommunicator)
     {
         _nobreakCommunicator = nobreakCommunicator;
@@ -57,4 +66,23 @@ public class NobreakController : ControllerBase
     [HttpDelete("Test")]
     public NobreakStatus CancelTest()=>
         _nobreakCommunicator.CancelTest();
+
+    /// <summary>
+    /// Unused
+    /// </summary>
+    [NonAction]
+    public void OnActionExecuting(ActionExecutingContext context) { }
+
+    /// <summary>
+    /// Rewrites result if an exception happened to a 503 page
+    /// </summary>
+    [NonAction]
+    public void OnActionExecuted(ActionExecutedContext context)
+    {
+        if (context.Exception is not null)
+        {
+            context.ExceptionHandled = true;
+            context.Result = Problem(title: "Nobreak unavailable", detail: context.Exception.Message, statusCode: 503);
+        }
+    }
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Diagnostics;
-using System.IO.Ports;
+﻿using System.IO.Ports;
 using ThFnsc.Nobreak.Core.Models;
 
 namespace ThFnsc.Nobreak.Core.Services;
@@ -50,7 +48,10 @@ public class NobreakCommunicator : INobreakCommunicator, IDisposable
                 exceptions.Add(e);
             }
         }
-        throw new AggregateException(exceptions);
+        if (exceptions.Count > 0)
+            throw new AggregateException(exceptions);
+        else
+            throw new Exception("No ports found");
     }
 
     public void Disconnect()
