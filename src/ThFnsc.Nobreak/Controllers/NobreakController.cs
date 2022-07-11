@@ -81,6 +81,9 @@ public class NobreakController : ControllerBase, IActionFilter
     {
         if (context.Exception is not null)
         {
+            context.HttpContext.RequestServices
+                .GetRequiredService<ILogger<NobreakController>>()
+                .LogError(context.Exception, "Action error");
             context.ExceptionHandled = true;
             context.Result = Problem(title: "Nobreak unavailable", detail: context.Exception.Message, statusCode: 503);
         }

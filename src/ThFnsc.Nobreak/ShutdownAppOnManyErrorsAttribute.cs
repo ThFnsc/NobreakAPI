@@ -27,6 +27,11 @@ public class ShutdownAppOnManyErrorsAttribute : ActionFilterAttribute
         if (context.Exception is null)
             _errorCount = 0;
         else if (++_errorCount >= _errorsBeforeShutdown)
+        {
+            context.HttpContext.RequestServices
+                .GetRequiredService<ILogger<ShutdownAppOnManyErrorsAttribute>>()
+                .LogCritical("Maximum exception count of {MaxErrors} reached. Shutting down application...", _errorsBeforeShutdown);
             Environment.Exit(1);
+        }
     }
 }
