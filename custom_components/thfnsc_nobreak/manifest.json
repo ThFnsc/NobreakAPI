@@ -1,0 +1,15 @@
+{
+  "domain": "thfnsc_nobreak",
+  "name": "ThFnsc Nobreak",
+  "config_flow": true,
+  "documentation": "https://github.com/ThFnsc/NobreakAPI",
+  "issue_tracker": "https://github.com/ThFnsc/NobreakAPI/issues",
+  "version": "1.0.0",
+  "requirements": [],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
+  "dependencies": [],
+  "codeowners": ["@thfnsc"],
+  "iot_class": "cloud_polling"
+}

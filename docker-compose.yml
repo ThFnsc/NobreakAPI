@@ -2,10 +2,17 @@ version: '3'
 
 services:
   nobreakapi:
+    image: thiagofnsc/nobreakapi
     build: .
     restart: always
-    volumes:
-      - /dev:/dev
-    privileged: true
     ports: 
       - 6300:80
+    deploy:
+      resources:
+        limits:
+          cpus: '.25'
+          memory: 128MB
+    user: root
+    privileged: true
+    volumes:
+      - /dev:/dev
