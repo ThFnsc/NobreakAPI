@@ -24,13 +24,25 @@ public class NobreakController : ControllerBase, IActionFilter
         _nobreakCommunicator = nobreakCommunicator;
     }
 
+    private static async Task<T> ExecuteWithTimeout<T>(Func<T> action)
+    {
+        var delayTask = Task.Delay(TimeSpan.FromSeconds(2));
+        var actionTask = Task.Run(action);
+        await Task.WhenAny(delayTask, actionTask);
+        if (actionTask.IsCompletedSuccessfully)
+            return actionTask.Result;
+        else if (actionTask.IsFaulted)
+            throw actionTask.Exception!;
+        throw new TimeoutException();        
+    }
+
     /// <summary>
     /// Gets the latest status
     /// </summary>
     /// <returns>The latest status</returns>
     [HttpGet(Name = "Status")]
-    public NobreakStatus Get() =>
-        _nobreakCommunicator.GetStatus();
+    public Task<NobreakStatus> Get() =>
+        ExecuteWithTimeout(() => _nobreakCommunicator.GetStatus());
 
     /// <summary>
     /// Performs a self-test.
@@ -40,32 +52,33 @@ public class NobreakController : ControllerBase, IActionFilter
     /// </param>
     /// <returns>The latest status</returns>
     [HttpPost("Test/{for}")]
-    public ActionResult<NobreakStatus> Test([Required]string @for)
-    {
-        if (@for.Equals("untilflat", StringComparison.InvariantCultureIgnoreCase))
-            return _nobreakCommunicator.TestUntilFlatBattery();
-        else if (@for.Equals("quick", StringComparison.InvariantCultureIgnoreCase))
-            return _nobreakCommunicator.Test();
-        else if(byte.TryParse(@for, out var minutes) && minutes is > 0 and < 100)
-            return _nobreakCommunicator.Test(minutes);
-        ModelState.AddModelError(nameof(@for), "Acceptable values are: quick, untilflat or <minutes>(1-99)");
-        return ValidationProblem();
-    }
+    public Task<ActionResult<NobreakStatus>> Test([Required] string @for) =>
+        ExecuteWithTimeout<ActionResult<NobreakStatus>>(() =>
+        {
+            if (@for.Equals("untilflat", StringComparison.InvariantCultureIgnoreCase))
+                return _nobreakCommunicator.TestUntilFlatBattery();
+            else if (@for.Equals("quick", StringComparison.InvariantCultureIgnoreCase))
+                return _nobreakCommunicator.Test();
+            else if (byte.TryParse(@for, out var minutes) && minutes is > 0 and < 100)
+                return _nobreakCommunicator.Test(minutes);
+            ModelState.AddModelError(nameof(@for), "Acceptable values are: quick, untilflat or <minutes>(1-99)");
+            return ValidationProblem();
+        });
 
     /// <summary>
     /// Changes the beeping mode
     /// </summary>
     /// <param name="state">True to enable beeper</param>
     [HttpPost("Beep/{state}")]
-    public NobreakStatus ChangeBeep([Required] bool state) =>
-        _nobreakCommunicator.SetBeep(state);
+    public Task<NobreakStatus> ChangeBeep([Required] bool state) =>
+        ExecuteWithTimeout(() => _nobreakCommunicator.SetBeep(state));
 
     /// <summary>
     /// Cancels a test
     /// </summary>
     [HttpDelete("Test")]
-    public NobreakStatus CancelTest()=>
-        _nobreakCommunicator.CancelTest();
+    public Task<NobreakStatus> CancelTest()=>
+        ExecuteWithTimeout(() => _nobreakCommunicator.CancelTest());
 
     /// <summary>
     /// Unused
