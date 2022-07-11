@@ -75,6 +75,13 @@ async def async_setup_entry(
                 None,
                 "mdi:transmission-tower",
             ),
+            NobreakValue(
+                coordinator,
+                "batteryPercentage",
+                "Battery percentage",
+                SensorDeviceClass.BATTERY,
+                "%",
+            ),
         ]
     )
 

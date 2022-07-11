@@ -24,6 +24,21 @@ public readonly struct NobreakStatus
 
     public bool TestExecuting { get; init; }
 
+    public byte BatteryPercentage =>
+        (byte)Math.Round(PowerSource is PowerSource.Grid
+            ? MapTrim(BatteryVoltage, 23.6f,27.2f, 0, 100)
+            : MapTrim(BatteryVoltage, 19.6f, 23.6f, 0, 100));
+
+    private static float MapTrim(float x, float in_min, float in_max, float out_min, float out_max)
+    {
+        var res = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        if(res < out_min)
+            return out_min;
+        if(res > out_max)
+            return out_max;
+        return res;
+    }
+
     internal static NobreakStatus ParseFromSerialResponse(string serial)
     {
         ArgumentNullException.ThrowIfNull(serial);
