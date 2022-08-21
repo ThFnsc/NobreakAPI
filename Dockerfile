@@ -57,7 +57,7 @@ FROM runtime AS final
 ENV ASPNETCORE_URLS=http://*:80
 EXPOSE 80
 WORKDIR /app
-HEALTHCHECK --interval=5s --timeout=1s CMD wget --no-verbose --tries=1 --spider http://localhost/ || exit 1
+HEALTHCHECK --interval=5s --timeout=1s CMD wget --no-verbose --tries=1 --spider http://localhost/Nobreak || exit 1
 
 #Copy build files that rarely change
 #COPY --from=publish /app/publish/runtimes ./runtimes
