@@ -12,7 +12,7 @@ jobs:
           dotnet-version: '7.0'
           include-prerelease: true
       - name: Publish
-        run: dotnet publish -c Release --sc --os linux -a x64 -p:PublishProfile=DefaultContainer -p:PublishSingleFile=true -p:DebugType=embedded -p:PublishReadyToRun=true -p:IsTransformWebConfigDisabled=true -p:ServerGarbageCollection=false src/ThFnsc.Nobreak
+        run: dotnet publish -c Release --os linux -a x64 -p:PublishProfile=DefaultContainer -p:ServerGarbageCollection=false src/ThFnsc.Nobreak
       - name: Docker Login
         uses: actions-hub/docker/login@master
         env:
