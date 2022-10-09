@@ -9,7 +9,7 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: 7.0
+          dotnet-version: '7.0'
           include-prerelease: true
       - name: Publish
         run: dotnet publish -c Release --sc --os linux -a x64 -p:PublishProfile=DefaultContainer -p:PublishSingleFile=true -p:DebugType=embedded -p:PublishReadyToRun=true -p:IsTransformWebConfigDisabled=true src/ThFnsc.Nobreak
