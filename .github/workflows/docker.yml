@@ -9,10 +9,9 @@ jobs:
       - name: Setup .NET SDK
         uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '7.0'
-          include-prerelease: true
+          dotnet-version: '7.x'
       - name: Publish
-        run: dotnet publish -c Release --sc --os linux -a x64 -p:PublishProfile=DefaultContainer -p:PublishSingleFile=true -p:DebugType=embedded -p:PublishReadyToRun=true -p:IsTransformWebConfigDisabled=true
+        run: dotnet publish -c Release --sc --os linux -a x64 -p:PublishProfile=DefaultContainer -p:PublishSingleFile=true -p:DebugType=embedded -p:PublishReadyToRun=true -p:IsTransformWebConfigDisabled=true src/ThFnsc.Nobreak
       - name: Docker Login
         uses: actions-hub/docker/login@master
         env:
